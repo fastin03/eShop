@@ -28,8 +28,8 @@ jobs:
       uses: Azure/docker-login@v1
       with:
         # Container registry username
-        username: ${{ secerts.ACR_USER}}
+        username: ${{ secerts.ACR_USER }}
         # Container registry password
-        password: ${{ secerts.ACR_PASSWORD}}
+        password: ${{ secerts.ACR_PASSWORD }}
         # Container registry server url
-        login-server: ${{ secerts.ACR_SERVER}}
+        login-server: ${{ secerts.ACR_SERVER }}
