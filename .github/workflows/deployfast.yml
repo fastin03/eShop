@@ -1,16 +1,12 @@
 name: eShop Build and Test
-
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -22,13 +18,22 @@ jobs:
     - name: Build
       run: dotnet build ./eShopOnWeb.sln --configuration Release
     - name: Test
-      run: dotnet test ./eShopOnWeb.sln --configuration Release      
+      run: dotnet test ./eShopOnWeb.sln --configuration Release
+  buildPushAppImage:
+    name: Build and Push to ACR
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
     - name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
         # Container registry username
-        username: ${{ secerts.ACR_USER }}
+        username: ${{ secrets.ACR_USER}}
         # Container registry password
-        password: ${{ secerts.ACR_PASSWORD }}
+        password: ${{ secrets.ACR_PASSWORD}}
         # Container registry server url
-        login-server: ${{ secerts.ACR_SERVER }}
+        login-server: ${{ secrets.ACR_SERVER}}
+    - run: |
+        docker build -f src/Web/Dockerfile . -t ${{ secrets.ACR_SERVER }}/eshop:${{ github.run_id }}
+        docker push ${{ secrets.ACR_SERVER }}/eshop:${{ github.run_id }}
