@@ -22,8 +22,7 @@ jobs:
     - name: Build
       run: dotnet build ./eShopOnWeb.sln --configuration Release
     - name: Test
-      run: dotnet test ./eShopOnWeb.sln --configuration Release
-      
+      run: dotnet test ./eShopOnWeb.sln --configuration Release      
     - name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
